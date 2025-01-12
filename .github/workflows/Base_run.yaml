@@ -19,6 +19,7 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
@@ -27,25 +28,27 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-
-      - name: Set working directory
-        run: cd .\public\ 
       # Installs project dependencies
       - name: Install dependencies
+        working-directory: ./public
+
         run: npm install
 
       # Runs development server
       - name: Serve with hot reload
+        working-directory: ./public
         run: quasar dev
         env:
           NODE_ENV: development
 
       # Builds the project for production
       - name: Build for production
+        working-directory: ./public
         run: quasar build
         env:
           NODE_ENV: production
 
       # Lints the code
       - name: Lint code
+        working-directory: ./public
         run: quasar lint
