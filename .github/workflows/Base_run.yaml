@@ -28,6 +28,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+        
+      - name: Install Quasar CLI
+        run: npm install -g @quasar/cli
+
       # Installs project dependencies
       - name: Install dependencies
         working-directory: ./public
