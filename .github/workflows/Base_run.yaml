@@ -28,6 +28,8 @@ jobs:
         with:
           node-version: '16'
 
+      - name: Set working directory
+        run: cd .\public\ 
       # Installs project dependencies
       - name: Install dependencies
         run: npm install
