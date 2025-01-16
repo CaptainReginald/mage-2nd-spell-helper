@@ -1,58 +1,40 @@
-name: CI
+name: Deploy to GitHub Pages
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      # Sets up Node.js for the project
+      # Set up Node.js with a compatible version
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
-        
-      - name: Install Quasar CLI
-        run: npm install -g @quasar/cli
+          node-version: '10' # Adjust based on Quasar v0.14 compatibility
 
-      # Installs project dependencies
+      # Install dependencies
       - name: Install dependencies
         working-directory: ./public
-
         run: npm install
 
-      # Runs development server
-      - name: Serve with hot reload
+      # Build the project for production
+      - name: Build project
         working-directory: ./public
-        run: quasar dev
-        env:
-          NODE_ENV: development
+        run: npm run build
 
-      # Builds the project for production
-      - name: Build for production
-        working-directory: ./public
-        run: quasar build
-        env:
-          NODE_ENV: production
-
-      # Lints the code
-      - name: Lint code
-        working-directory: ./public
-        run: quasar lint
+      # Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public/dist/spa # Adjust if output directory differs
