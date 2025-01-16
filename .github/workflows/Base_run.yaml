@@ -22,6 +22,10 @@ jobs:
         with:
           node-version: '10' # Adjust based on Quasar v0.14 compatibility
 
+      - name: Install Quasar CLI (legacy version)
+        run: npm install --save-dev quasar-cli@0.6.5
+
+
       # Install dependencies
       - name: Install dependencies
         working-directory: ./public
